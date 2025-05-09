@@ -1,0 +1,35 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import { AuthProvider } from './context/AuthContext';
+import Profile from './pages/Profile'; 
+import Post from './pages/Post';
+
+// Simple Home component as a placeholder
+const Home = () => (
+  <div className="p-4">
+    <h1 className="text-2xl font-semibold">Welcome to the Home Page</h1>
+  </div>
+);
+
+const App = () => {
+  return (
+    <Router>
+      <AuthProvider>
+        {/* Navbar component visible on all pages */}
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<Profile />} /> 
+          <Route path="/post" element={<Post />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
+  );
+};
+
+export default App;
