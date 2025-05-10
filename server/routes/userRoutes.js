@@ -1,20 +1,19 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const User = require('../models/User');
+const authController = require('../controllers/userController');
 
 const router = express.Router();
-
-// ====== Load environment variables ======
-const JWT_SECRET = process.env.JWT_SECRET || 'your_default_secret';
 
 // ====== Ensure 'uploads' folder exists ======
 const uploadDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
+    try {
+        fs.mkdirSync(uploadDir);
+    } catch (error) {
+        console.error('Error creating uploads directory:', error);
+    }
 }
 
 // ====== Multer Configuration ======
@@ -28,110 +27,36 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage });
-
-// ====== JWT Auth Middleware ======
-const authenticateUser = (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ message: 'Authentication token required' });
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.userId = decoded.userId;
-        next();
-    } catch (err) {
-        return res.status(401).json({ message: 'Invalid or expired token' });
+// File filter for validation (only images)
+const fileFilter = (req, file, cb) => {
+    const allowedFileTypes = /jpeg|jpg|png|gif/;
+    const isValid = allowedFileTypes.test(path.extname(file.originalname).toLowerCase());
+    
+    if (isValid) {
+        cb(null, true);
+    } else {
+        cb(new Error('Only image files are allowed!'), false);
     }
 };
 
-// ====== Signup ======
-router.post('/signup', async (req, res) => {
-    const { name, email, password } = req.body;
-    try {
-        const userExists = await User.findOne({ email });
-        if (userExists) return res.status(400).json({ error: 'User already exists' });
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
-        await newUser.save();
-
-        const token = jwt.sign(
-            { userId: newUser._id, name: newUser.name, email: newUser.email },
-            JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
-        res.status(201).json({
-            message: 'User created successfully',
-            token,
-            user: {
-                _id: newUser._id,
-                name: newUser.name,
-                email: newUser.email
-            }
-        });
-    } catch (err) {
-        console.error('Signup Error:', err);
-        res.status(500).json({ error: 'Internal server error' });
+// Set file size limit (e.g., 5MB)
+const upload = multer({
+    storage,
+    fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
     }
 });
 
-// ====== Login ======
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ error: 'Invalid email or password' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ error: 'Invalid email or password' });
-
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-
-        res.json({
-            message: 'Login successful',
-            token,
-            user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                profilePic: user.profilePic
-            }
-        });
-    } catch (err) {
-        console.error('Login Error:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// ====== Upload Profile Picture ======
-router.post('/upload-profile-pic', authenticateUser, upload.single('profilePic'), async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const filePath = `uploads/${req.file.filename}`;
-    const fullUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
-
-    try {
-        const updatedUser = await User.findByIdAndUpdate(
-            req.userId,
-            { profilePic: fullUrl },
-            { new: true }
-        );
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        res.json({
-            message: 'Profile picture updated successfully',
-            profilePic: updatedUser.profilePic
-        });
-    } catch (err) {
-        console.error('Profile Pic Upload Error:', err);
-        res.status(500).json({ message: 'Error updating profile picture' });
-    }
+// Routes
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
+router.get('/me', authController.authenticateUser, authController.getUserProfile);
+router.post('/upload-profile-pic', authController.authenticateUser, upload.single('profilePic'), (req, res) => {
+    res.status(200).json({
+        message: 'Profile picture uploaded successfully!',
+        file: req.file
+    });
 });
 
 module.exports = router;
