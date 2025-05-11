@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext';
 import Profile from './pages/Profile'; 
 import Post from './pages/Post';
 import Answer from './pages/Answer'; 
+import GSpace from './pages/GSpace';
 
 // Simple Home component as a placeholder
 const Home = () => (
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} /> 
           <Route path="/post" element={<Post />} />
           <Route path="/answer" element={<Answer />} />
+          <Route path="/gspaces" element={<GSpace />} />
         </Routes>
       </AuthProvider>
     </Router>
