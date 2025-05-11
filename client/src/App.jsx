@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Signup from './pages/SignUp';
 import { AuthProvider } from './context/AuthContext';
 import Profile from './pages/Profile'; 
 import Post from './pages/Post';
@@ -11,7 +11,6 @@ import Answer from './pages/Answer';
 // Simple Home component as a placeholder
 const Home = () => (
   <div className="p-4">
-    <h1 className="text-2xl font-semibold">Welcome to the Home Page</h1>
   </div>
 );
 

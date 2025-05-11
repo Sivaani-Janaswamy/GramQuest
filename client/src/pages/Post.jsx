@@ -9,10 +9,9 @@ const Post = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Error state for API calls
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Custom hook for redirecting if user is not authenticated
   useAuthRedirect(navigate);
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const Post = () => {
       try {
         const response = await axios.get('/api/posts');
         setPosts(response.data);
-        setLoading(false); // Stop loading once posts are fetched
+        setLoading(false);
       } catch (err) {
         setError('Failed to load posts. Please try again later.');
         setLoading(false);
@@ -54,33 +53,35 @@ const Post = () => {
     if (confirmation) {
       localStorage.removeItem('user');
       setUser(null);
-      setPosts([]); // Reset posts on logout
+      setPosts([]);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="max-w-3xl mx-auto mb-10">
-        <PostForm posts={posts} setPosts={setPosts} />
-      </div>
+<div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div className="max-w-6xl mx-auto space-y-16">
+    <PostForm posts={posts} setPosts={setPosts} />
 
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-xl font-semibold mb-4">Your Previous Posts</h2>
+    <div className="w-full">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-left px-33">
+        Your Previous Posts
+      </h2>
 
-        {!user ? (
-          <p className="text-red-600">You need to login to see your posts.</p>
-        ) : loading ? (
-          <p>Loading posts...</p>
-        ) : error ? (
-          <p className="text-red-600">{error}</p> // Display error message
-        ) : userPosts.length === 0 ? (
-          <p className="text-gray-600">You haven’t posted anything yet.</p>
-        ) : (
-          <RecentPosts posts={userPosts} />
-        )}
-      </div>
-
+      {!user ? (
+        <p className="text-red-600 px-2">You need to login to see your posts.</p>
+      ) : loading ? (
+        <p className="px-2">Loading posts...</p>
+      ) : error ? (
+        <p className="text-red-600 px-2">{error}</p>
+      ) : userPosts.length === 0 ? (
+        <p className="text-gray-600 px-2">You haven’t posted anything yet.</p>
+      ) : (
+        <RecentPosts posts={userPosts} isPostTab={true} />
+      )}
     </div>
+  </div>
+</div>
+
   );
 };
 

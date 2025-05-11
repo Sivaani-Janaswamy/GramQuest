@@ -57,62 +57,78 @@ const PostForm = ({ posts, setPosts }) => {
       setFiles([]);
       setError('');
       setSuccessMessage('Question posted successfully!');
-      setPosts([...posts, response.data]); // Add the new post to the posts list
+      setPosts([...posts, response.data]);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to post question.');
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg mb-10">
-      <h1 className="text-3xl font-bold text-center mb-4 text-gray-800">Post a Question</h1>
-      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-      {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
+    <div className="w-full max-w-5xl mx-auto p-10 rounded-2xl shadow-2xl mb-12 bg-white border border-gray-200">
+      <h1 className="text-4xl font-bold text-center mb-8 text-blue-900">Post a Question</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+      {successMessage && (
+        <p className="text-green-600 text-center mb-4">{successMessage}</p>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block font-semibold text-gray-700">Title</label>
+          <label htmlFor="title" className="block text-sm font-semibold mb-2 text-blue-900">
+            Title
+          </label>
           <input
             id="title"
             type="text"
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500"
-            placeholder="Enter your question title"
+            className="w-full p-4 rounded-xl border border-gray-300 bg-gray-50 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+            placeholder="e.g. How to implement JWT in React?"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
 
         <div>
-          <label htmlFor="body" className="block font-semibold text-gray-700">Body</label>
+          <label htmlFor="body" className="block text-sm font-semibold mb-2 text-blue-900">
+            Body
+          </label>
           <textarea
             id="body"
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500"
-            rows="6"
-            placeholder="Enter your detailed question"
+            rows="5"
+            className="w-full p-4 rounded-xl border border-gray-300 bg-gray-50 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+            placeholder="Include all relevant details, code snippets, or context here..."
             value={body}
             onChange={(e) => setBody(e.target.value)}
           />
         </div>
 
         <div>
-          <label htmlFor="attachments" className="block font-semibold text-gray-700">Attachments</label>
+          <label htmlFor="attachments" className="block text-sm font-semibold mb-2 text-blue-900">
+            Attachments (optional)
+          </label>
           <input
             id="attachments"
             type="file"
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500"
+            className="w-full p-3 rounded-xl border border-gray-300 bg-white"
             multiple
             onChange={handleFileChange}
           />
           {files.length > 0 && (
-            <div className="mt-2 text-sm text-gray-600">
-              <h3>Selected Files:</h3>
-              <ul>{files.map((f, i) => <li key={i}>{f.name}</li>)}</ul>
+            <div className="mt-3 text-sm text-gray-700">
+              <strong>Selected Files:</strong>
+              <ul className="list-disc ml-6 mt-1">
+                {files.map((f, i) => (
+                  <li key={i}>{f.name}</li>
+                ))}
+              </ul>
             </div>
           )}
         </div>
 
         <div className="text-center">
-          <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+          <button
+            type="submit"
+            className="px-6 py-3 text-white bg-gradient-to-r from-teal-500 to-lime-500 hover:from-teal-600 hover:to-lime-600 rounded-xl font-semibold shadow-md transition-all duration-200"
+          >
             Post Question
           </button>
         </div>

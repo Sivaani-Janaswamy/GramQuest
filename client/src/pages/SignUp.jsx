@@ -12,7 +12,7 @@ const Signup = () => {
   });
   const [message, setMessage] = useState('');
 
-  const { login } = useAuth(); // Use the login function from context
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,30 +20,25 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       setMessage('Passwords do not match');
       return;
     }
+
     try {
       const response = await axios.post('http://localhost:3000/api/users/signup', formData);
-      console.log(response.data);
       setMessage('Signup successful!');
 
-      // Automatically login after signup
       login(formData.email, formData.password);
-
-      // Store token in localStorage
       localStorage.setItem('token', response.data.token);
 
-      // Optionally store user info if needed, or leave it to AuthContext
       if (response.data.user) {
-        // Only store user data in context if you want to use it across components
         localStorage.setItem('user', JSON.stringify(response.data.user));
       } else {
         setMessage('User data is not available.');
       }
 
-      // Reset form data after successful signup
       setFormData({
         name: '',
         email: '',
@@ -93,11 +88,20 @@ const Signup = () => {
   ];
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-center mb-6">Signup</h2>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-6 py-16">
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-12">
+        <div className="mb-10 text-center">
+          <h2 className="text-4xl font-extrabold text-gray-800">Create an Account</h2>
+          <p className="mt-4 text-lg text-gray-600">Join us and start your journey.</p>
+        </div>
+
         <Form inputs={inputs} buttonLabel="Sign Up" onSubmit={handleSubmit} />
-        {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
+
+        {message && (
+          <p className={`mt-6 text-center text-md ${message.includes('successful') ? 'text-green-600' : 'text-red-500'}`}>
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );

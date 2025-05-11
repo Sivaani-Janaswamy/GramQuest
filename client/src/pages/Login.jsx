@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Form from '../components/Form'; // Assuming you have a reusable Form component
-import { useAuth } from '../context/AuthContext'; // Assuming AuthContext is set up properly
+import Form from '../components/Form';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState(''); // Message for success/error feedback
+  const [message, setMessage] = useState('');
 
-  const { login } = useAuth(); // Access the login function from AuthContext
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,32 +16,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form fields
     if (!formData.email || !formData.password) {
       setMessage('Both email and password are required.');
       return;
     }
 
     try {
-      // Make API call to login endpoint
       const response = await axios.post('http://localhost:3000/api/users/login', formData);
-      console.log('Response data:', response.data); // Log the response from the server
-
-      // Extract token and user from response
       const { token, user } = response.data;
 
-      // Handle successful login
       setMessage('Login successful!');
-      login(user.email, formData.password); // Update AuthContext
-      localStorage.setItem('token', token); // Store token
-      localStorage.setItem('user', JSON.stringify({ id: user._id, name: user.name, email: user.email })); // Store user info
-
+      login(user.email, formData.password);
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify({ id: user._id, name: user.name, email: user.email }));
     } catch (error) {
-      console.error('Login error:', error);
-
       if (error.response) {
-        console.error('Error Response:', error.response.data);
-        console.error('Error Status:', error.response.status);
         setMessage('Login failed. Please check your credentials.');
       } else {
         setMessage('An unexpected error occurred. Please try again later.');
@@ -49,7 +38,6 @@ const Login = () => {
     }
   };
 
-  // Inputs for the form
   const inputs = [
     {
       type: 'email',
@@ -70,11 +58,20 @@ const Login = () => {
   ];
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-6 py-16">
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-12">
+        <div className="mb-10 text-center">
+          <h2 className="text-4xl font-extrabold text-gray-800">Sign In to Your Account</h2>
+          <p className="mt-4 text-lg text-gray-600">Welcome back! Please enter your credentials.</p>
+        </div>
+
         <Form inputs={inputs} buttonLabel="Login" onSubmit={handleSubmit} />
-        {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
+
+        {message && (
+          <p className={`mt-6 text-center text-md ${message.includes('successful') ? 'text-green-600' : 'text-red-500'}`}>
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );

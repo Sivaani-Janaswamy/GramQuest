@@ -15,7 +15,9 @@ const Form = ({ inputs, buttonLabel, onSubmit }) => {
           required={input.required}
         />
       ))}
-        <SubmitButton label={buttonLabel} type="submit" className="w-full p-2 mt-4" />
+      <div className="flex justify-center">
+        <SubmitButton label={buttonLabel} type="submit" />
+      </div>
     </form>
   );
 };
