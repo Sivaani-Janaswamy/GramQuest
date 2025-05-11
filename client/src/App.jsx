@@ -8,7 +8,7 @@ import Profile from './pages/Profile';
 import Post from './pages/Post';
 import Answer from './pages/Answer'; 
 import GSpace from './pages/GSpace';
-
+import Quest from './pages/Quest';
 // Simple Home component as a placeholder
 const Home = () => (
   <div className="p-4">
@@ -29,6 +29,7 @@ const App = () => {
           <Route path="/post" element={<Post />} />
           <Route path="/answer" element={<Answer />} />
           <Route path="/gspaces" element={<GSpace />} />
+          <Route path="/quests" element={<Quest/>} />
         </Routes>
       </AuthProvider>
     </Router>
