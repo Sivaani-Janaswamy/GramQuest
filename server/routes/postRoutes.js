@@ -2,23 +2,11 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
 
 const postController = require('../controllers/postController');
 
-// JWT Middleware
-const verifyToken = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ message: 'Authentication required' });
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { _id: decoded.userId }; // Store user ID in req.user
-    next();
-  } catch (err) {
-    res.status(401).json({ message: 'Invalid or expired token' });
-  }
-};
+// Import JWT Middleware
+const { verifyToken } = require('../middleware/authMiddleware');
 
 // Create uploads folder if not exists
 const uploadsDir = './uploads';
@@ -51,9 +39,11 @@ const upload = multer({
 // Routes
 router.post('/', verifyToken, upload.array('attachments'), postController.createPost);
 router.get('/', postController.getAllPosts);
-router.get('/mine', verifyToken, postController.getMyPosts); 
+router.get('/mine', verifyToken, postController.getMyPosts);
 router.put('/:id/star', verifyToken, postController.starPost); // Added verifyToken
 router.put('/:id/upvote', verifyToken, postController.upvotePost); // Added verifyToken
 router.post('/:id/reply', verifyToken, postController.replyToPost); // Added verifyToken
+router.put('/:id', verifyToken, postController.updatePost);
+router.delete('/:id', verifyToken, postController.deletePost);
 
 module.exports = router;

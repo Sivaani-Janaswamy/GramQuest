@@ -1,26 +1,31 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Create context
-const AuthContext = createContext();
+const AuthContext = createContext({
+  isAuthenticated: false,
+  user: null,
+  login: async () => {},
+  logout: () => {},
+});
 
-// Custom hook to use the AuthContext
+// Hook to use the AuthContext
 export const useAuth = () => useContext(AuthContext);
 
-// AuthProvider component
+// AuthProvider
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Load user status on mount
+  // Load user from localStorage on mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
       setIsAuthenticated(true);
-      fetchUser(token); // Fetch fresh user data from backend
+      fetchUser(token);
     }
   }, []);
 
-  // Fetch user data using token
+  // Fetch user info
   const fetchUser = async (token) => {
     try {
       const res = await fetch("http://localhost:3000/api/users/me", {
@@ -28,38 +33,42 @@ export function AuthProvider({ children }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!res.ok) throw new Error("Failed to fetch user");
+      if (!res.ok) throw new Error("Invalid token");
       const data = await res.json();
       setUser(data.user);
     } catch (err) {
-      console.error("User fetch error:", err.message);
-      logout(); // Force logout if token is invalid
+      console.error("Fetch user error:", err.message);
+      logout(); // Force logout on error
     }
   };
 
+  // Login
   const login = async (email, password) => {
     try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
+      const res = await fetch("http://localhost:3000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) throw new Error("Login failed");
+      if (!res.ok) throw new Error("Invalid credentials");
 
-      const data = await response.json();
+      const data = await res.json();
       localStorage.setItem("authToken", data.token);
       setIsAuthenticated(true);
-      fetchUser(data.token); // Get user from backend
+      await fetchUser(data.token);
     } catch (error) {
       console.error("Login error:", error.message);
+      throw error; // Let UI handle display
     }
   };
 
-  const logout = () => {
+  // Logout
+  const logout = (callback) => {
+    localStorage.removeItem("authToken");
     setIsAuthenticated(false);
     setUser(null);
-    localStorage.removeItem("authToken");
+    if (callback) callback();
   };
 
   return (
@@ -68,3 +77,5 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+export { AuthContext };

@@ -116,11 +116,73 @@ const replyToPost = async (req, res) => {
   }
 };
 
+// Update a post
+const updatePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    // Only the owner can edit
+    if (post.user.toString() !== req.user._id) {
+      return res.status(403).json({ message: 'You are not authorized to edit this post' });
+    }
+
+    const { title, body } = req.body;
+    if (!title.trim() || !body.trim()) {
+      return res.status(400).json({ message: 'Title and body are required' });
+    }
+
+    post.title = title;
+    post.body = body;
+
+    await post.save();
+    res.json({ message: 'Post updated successfully', post });
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Delete a post
+const deletePost = async (req, res) => {
+  console.log('Post ID:', req.params.id);
+      //Log req.user._id
+    console.log('User ID:', req.user._id);
+  try {
+    const post = await Post.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user._id// Ensure user can only delete their own posts
+      //Log req.params.id
+      //Log req.user._id
+    });
+    console.log('Post ID:', req.params.id);
+      //Log req.user._id
+    console.log('User ID:', req.user._id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found or unauthorized' });
+    }
+
+    // Optionally delete attachments
+    if (post.attachments?.length) {
+      post.attachments.forEach(file => {
+        fs.unlinkSync(`./uploads/${file.filename}`);
+      });
+    }
+
+    res.json({ message: 'Post deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getMyPosts,
   starPost,
   upvotePost,
-  replyToPost
+  replyToPost,
+  updatePost,
+  deletePost
 };

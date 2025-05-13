@@ -3,7 +3,7 @@ import PostList from './PostList';      // Component that displays posts
 import Filter from './Filter';          // Component for filtering/sorting
 import SearchBar from './SearchBar';    // Component for search
 
-const RecentPosts = ({ posts, isPostTab }) => {
+const RecentPosts = ({ posts, isPostTab, refreshPosts }) => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
 
   // Handle filter changes
@@ -30,6 +30,11 @@ const RecentPosts = ({ posts, isPostTab }) => {
   };
 
   useEffect(() => {
+    // Update filtered posts when the `posts` prop changes
+    setFilteredPosts(posts);
+  }, [posts]);
+
+  useEffect(() => {
     // Initial filter: newest first
     handleFilterChange({
       filterByUpvotes: false,
@@ -37,7 +42,7 @@ const RecentPosts = ({ posts, isPostTab }) => {
       sortByDate: true,
       sortByOldest: false
     });
-  }, [posts]); // Update filters when posts change
+  }, []); // Only run once on mount
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -46,7 +51,7 @@ const RecentPosts = ({ posts, isPostTab }) => {
         <Filter onFilterChange={handleFilterChange} />
       </div>
 
-      <PostList posts={filteredPosts} isPostTab={isPostTab} />
+      <PostList posts={filteredPosts} isPostTab={isPostTab} refreshPosts={refreshPosts} />
     </div>
   );
 };

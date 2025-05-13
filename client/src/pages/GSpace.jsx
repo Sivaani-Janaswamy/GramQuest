@@ -13,8 +13,16 @@ export default function GSpace() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Dummy data (for now)
-  const gspaces = []; // Add real GSpace objects here later
+  // Dummy data (one sample GSpace)
+  const gspaces = [
+    {
+      imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+      imageAlt: "Creative Collaboration",
+      title: "Tech Innovators",
+      description: "A space for tech enthusiasts to share and collaborate on innovative ideas.",
+      tags: ["AI", "Robotics", "Innovation"]
+    }
+  ];
 
   const filtered = gspaces.filter((g) =>
     g.title.toLowerCase().includes(searchQuery.toLowerCase())

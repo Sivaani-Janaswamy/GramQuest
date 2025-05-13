@@ -1,38 +1,92 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/SignUp';
-import { AuthProvider } from './context/AuthContext';
-import Profile from './pages/Profile'; 
+import Profile from './pages/Profile';
 import Post from './pages/Post';
-import Answer from './pages/Answer'; 
+import Answer from './pages/Answer';
 import GSpace from './pages/GSpace';
 import Quest from './pages/Quest';
-// Simple Home component as a placeholder
-const Home = () => (
-  <div className="p-4">
-  </div>
-);
+import { useAuth } from './context/AuthContext';
+
+const Home = () => <div className="p-4">Welcome Home</div>;
 
 const App = () => {
+  const [posts, setPosts] = useState([]);
+  const { logout: authLogout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      if (isAuthenticated) {
+        try {
+          const response = await fetch('http://localhost:3000/api/posts', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setPosts(data);
+          } else {
+            console.error('Failed to fetch posts');
+          }
+        } catch (error) {
+          console.error('Error fetching posts:', error);
+        }
+      } else {
+        setPosts([]);
+      }
+    };
+
+    fetchPosts();
+  }, [isAuthenticated]);
+
+  const handleLogout = () => {
+    console.log('App.jsx: handleLogout called');
+    authLogout(() => {
+      setPosts([]);
+      navigate('/login');
+    });
+  };
+
+  const refreshPosts = async () => {
+    if (isAuthenticated) {
+      try {
+        const response = await fetch('http://localhost:3000/api/posts', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPosts(data);
+        } else {
+          console.error('Failed to refresh posts');
+        }
+      } catch (error) {
+        console.error('Error refreshing posts:', error);
+      }
+    } else {
+      setPosts([]);
+    }
+  };
+
   return (
-    <Router>
-      <AuthProvider>
-        {/* Navbar component visible on all pages */}
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} /> 
-          <Route path="/post" element={<Post />} />
-          <Route path="/answer" element={<Answer />} />
-          <Route path="/gspaces" element={<GSpace />} />
-          <Route path="/quests" element={<Quest/>} />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <>
+      <Navbar onLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/post" element={<Post posts={posts} refreshPosts={refreshPosts} />} />
+        <Route path="/answer" element={<Answer />} />
+        <Route path="/gspaces" element={<GSpace />} />
+        <Route path="/quests" element={<Quest />} />
+      </Routes>
+    </>
   );
 };
 

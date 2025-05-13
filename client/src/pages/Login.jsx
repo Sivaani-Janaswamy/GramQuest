@@ -20,7 +20,7 @@ const Login = () => {
       setMessage('Both email and password are required.');
       return;
     }
-
+ 
     try {
       const response = await axios.post('http://localhost:3000/api/users/login', formData);
       const { token, user } = response.data;
@@ -37,6 +37,7 @@ const Login = () => {
       }
     }
   };
+  
 
   const inputs = [
     {
