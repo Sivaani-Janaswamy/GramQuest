@@ -3,9 +3,8 @@ import Card from './Card';
 import userPlaceholder from '../assets/user.png';
 import { FaStar, FaThumbsUp } from 'react-icons/fa';
 import moment from 'moment';
-import ConfirmationModal from './ConfirmationModal'; // Ensure this path is correct
+import ConfirmationModal from './ConfirmationModal';
 
-// Define PostHeader component first (or import it if it's in a separate file)
 const PostHeader = ({ user }) => (
   <div className="flex items-center mb-4">
     <img
@@ -22,29 +21,51 @@ const PostHeader = ({ user }) => (
   </div>
 );
 
-// Define PostContent component
-const PostContent = ({ post }) => (
+const PostContent = ({ post, isEditing, editedPost, setEditedPost }) => (
   <div>
-    <h4 className="text-lg font-semibold mb-3 text-gray-900">{post.title}</h4>
-    <p className="text-gray-700 mb-4">{post.body}</p>
-    {post.attachments?.length > 0 && (
-      <div className="text-teal-600 font-medium">Attachment added</div>
+    {isEditing ? (
+      <>
+        <input
+          type="text"
+          value={editedPost.title}
+          onChange={(e) => setEditedPost((prev) => ({ ...prev, title: e.target.value }))}
+          className="w-full border border-gray-300 p-2 rounded mb-2"
+        />
+        <textarea
+          value={editedPost.body}
+          onChange={(e) => setEditedPost((prev) => ({ ...prev, body: e.target.value }))}
+          className="w-full border border-gray-300 p-2 rounded mb-2"
+        />
+      </>
+    ) : (
+      <>
+        <h4 className="text-lg font-semibold mb-3 text-gray-900">{post.title}</h4>
+        <p className="text-gray-700 mb-4">{post.body}</p>
+        {post.attachments?.length > 0 && (
+          <div className="text-teal-600 font-medium">Attachment added</div>
+        )}
+      </>
     )}
   </div>
 );
 
-// Define PostFooter component
-const PostFooter = ({ post, isPostTab, refreshPosts }) => {
+const PostFooter = ({
+  post,
+  isPostTab,
+  refreshPosts,
+  isEditing,
+  setIsEditing,
+  editedPost,
+  setEditedPost
+}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  console.log(isPostTab);
-  // Handle delete button click
+
   const handleDeleteClick = () => {
-    setIsDeleteModalOpen(true); // Open the modal when delete button is clicked
+    setIsDeleteModalOpen(true);
   };
 
-  // Handle confirmation of delete
   const handleConfirmDelete = async (postId) => {
-    setIsDeleteModalOpen(false); // Close the modal after confirmation
+    setIsDeleteModalOpen(false);
     try {
       const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
         method: 'DELETE',
@@ -58,21 +79,44 @@ const PostFooter = ({ post, isPostTab, refreshPosts }) => {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to delete post');
       }
-      refreshPosts(); // Refresh posts after deletion
+      refreshPosts();
     } catch (error) {
       console.error('Error deleting post:', error);
       alert(error.message || 'Failed to delete post');
     }
   };
 
-  // Handle cancel action in modal
   const handleCancelDelete = () => {
-    setIsDeleteModalOpen(false); // Close the modal if the user cancels
+    setIsDeleteModalOpen(false);
   };
 
   const handleEdit = () => {
-    console.log('Edit clicked');
-    // Implement edit functionality here
+    setIsEditing(true);
+    setEditedPost({ title: post.title, body: post.body });
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(editedPost)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update post');
+      }
+
+      setIsEditing(false);
+      refreshPosts();
+    } catch (error) {
+      console.error('Error updating post:', error);
+      alert(error.message || 'Failed to update post');
+    }
   };
 
   return (
@@ -110,7 +154,7 @@ const PostFooter = ({ post, isPostTab, refreshPosts }) => {
             Reply
           </button>
 
-          {isPostTab && (
+          {isPostTab && !isEditing && (
             <>
               <button
                 onClick={handleEdit}
@@ -119,10 +163,27 @@ const PostFooter = ({ post, isPostTab, refreshPosts }) => {
                 Edit
               </button>
               <button
-                onClick={handleDeleteClick} // Open the modal on click
+                onClick={handleDeleteClick}
                 className="text-sm px-4 py-2 rounded bg-red-100 text-red-800 hover:bg-red-200 transition"
               >
                 Delete
+              </button>
+            </>
+          )}
+
+          {isEditing && (
+            <>
+              <button
+                onClick={handleSave}
+                className="text-sm px-4 py-2 rounded bg-green-100 text-green-800 hover:bg-green-200 transition"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="text-sm px-4 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200 transition"
+              >
+                Cancel
               </button>
             </>
           )}
@@ -140,7 +201,6 @@ const PostFooter = ({ post, isPostTab, refreshPosts }) => {
         )}
       </div>
 
-      {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={handleCancelDelete}
@@ -152,27 +212,42 @@ const PostFooter = ({ post, isPostTab, refreshPosts }) => {
   );
 };
 
-
-// Main PostList component
 const PostList = ({ posts, isPostTab, refreshPosts }) => {
+  const [editingPostId, setEditingPostId] = useState(null);
+  const [editedPost, setEditedPost] = useState({ title: '', body: '' });
+
   return (
     <Card className="p-6">
       {posts.length > 0 ? (
         <ul className="space-y-6">
-          {posts.map((post) => (
-            <li
-              key={post._id}
-              className="p-5 rounded-lg shadow-md hover:shadow-xl transition-shadow bg-teal-50"
-            >
-              <PostHeader user={post.user} />
-              <PostContent post={post} />
-              <PostFooter
-                post={post}
-                isPostTab={isPostTab}
-                refreshPosts={refreshPosts}
-              />
-            </li>
-          ))}
+          {posts.map((post) => {
+            const isEditing = editingPostId === post._id;
+            return (
+              <li
+                key={post._id}
+                className="p-5 rounded-lg shadow-md hover:shadow-xl transition-shadow bg-teal-50"
+              >
+                <PostHeader user={post.user} />
+                <PostContent
+                  post={post}
+                  isEditing={isEditing}
+                  editedPost={editedPost}
+                  setEditedPost={setEditedPost}
+                />
+                <PostFooter
+                  post={post}
+                  isPostTab={isPostTab}
+                  refreshPosts={refreshPosts}
+                  isEditing={isEditing}
+                  setIsEditing={(editing) =>
+                    setEditingPostId(editing ? post._id : null)
+                  }
+                  editedPost={editedPost}
+                  setEditedPost={setEditedPost}
+                />
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <p className="text-gray-500">No posts available.</p>
