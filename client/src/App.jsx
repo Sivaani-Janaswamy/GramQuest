@@ -9,6 +9,8 @@ import Answer from './pages/Answer';
 import GSpace from './pages/GSpace';
 import Quest from './pages/Quest';
 import { useAuth } from './context/AuthContext';
+import CreateGSpace from './pages/CreateGSpace';
+import CommunityPage from './pages/CommunityPage';
 
 const Home = () => <div className="p-4">Welcome Home</div>;
 
@@ -84,6 +86,8 @@ const App = () => {
         <Route path="/post" element={<Post posts={posts} refreshPosts={refreshPosts} />} />
         <Route path="/answer" element={<Answer />} />
         <Route path="/gspaces" element={<GSpace />} />
+        <Route path="/gspace/create" element={<CreateGSpace />} />
+        <Route path="/gspace/:id" element={<CommunityPage />} />
         <Route path="/quests" element={<Quest />} />
       </Routes>
     </>

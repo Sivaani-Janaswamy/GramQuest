@@ -6,7 +6,7 @@ require('dotenv').config();
 const connectDB = require('./database/connect');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
-
+const gspaceRoutes = require('./routes/gspaceRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/gspaces', gspaceRoutes);
 console.log('API Posts Route Loaded');
 
 // Home route

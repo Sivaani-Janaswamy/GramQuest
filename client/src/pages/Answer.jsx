@@ -10,17 +10,17 @@ const Answer = () => {
   const navigate = useNavigate();
   useAuthRedirect(navigate);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get('/api/posts');
-        setPosts(response.data);
-      } catch (err) {
-        console.error('Failed to fetch posts:', err);
-      }
-    };
+  const refreshPosts = async () => { // Define the refreshPosts function here
+    try {
+      const response = await axios.get('/api/posts');
+      setPosts(response.data);
+    } catch (err) {
+      console.error('Failed to fetch posts:', err);
+    }
+  };
 
-    fetchPosts();
+  useEffect(() => {
+    refreshPosts(); // Call it on initial load
   }, []);
 
   return (
@@ -40,7 +40,7 @@ const Answer = () => {
               </p>
             </div>
             {/* Recent Posts */}
-            <RecentPosts posts={posts} isPostTab={false} />
+            <RecentPosts posts={posts} isPostTab={false} refreshPosts={refreshPosts} /> {/* Pass refreshPosts as a prop */}
           </div>
         </div>
       </div>

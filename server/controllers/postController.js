@@ -59,7 +59,7 @@ const starPost = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    const { userId } = req.body;
+    const  userId  = req.user._id;
     if (!userId) return res.status(400).json({ message: 'User ID required for starring' });
 
     if (!post.stars.includes(userId)) {
@@ -73,14 +73,30 @@ const starPost = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+// Backend route for unstarring a post (example - adjust as needed)
+const unstarPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
 
+    const userId = req.user._id;
+
+    post.stars = post.stars.filter(id => id.toString() !== userId.toString());
+    await post.save();
+
+    res.json(post);
+  } catch (err) {
+    console.error('Error unstarring post:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 // Upvote a post
 const upvotePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    const { userId } = req.body;
+    const  userId  = req.user._id;
     if (!userId) return res.status(400).json({ message: 'User ID required for upvoting' });
 
     if (!post.upvotes.includes(userId)) {
@@ -143,7 +159,23 @@ const updatePost = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+// Backend route for un-upvoting a post (example - adjust as needed)
+const unupvotePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
 
+    const userId = req.user._id;
+
+    post.upvotes = post.upvotes.filter(id => id.toString() !== userId.toString());
+    await post.save();
+
+    res.json(post);
+  } catch (err) {
+    console.error('Error un-upvoting post:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 // Delete a post
 const deletePost = async (req, res) => {
   console.log('Post ID:', req.params.id);
@@ -156,9 +188,6 @@ const deletePost = async (req, res) => {
       //Log req.params.id
       //Log req.user._id
     });
-    console.log('Post ID:', req.params.id);
-      //Log req.user._id
-    console.log('User ID:', req.user._id);
     if (!post) {
       return res.status(404).json({ message: 'Post not found or unauthorized' });
     }
@@ -184,5 +213,8 @@ module.exports = {
   upvotePost,
   replyToPost,
   updatePost,
-  deletePost
+  deletePost,
+  unstarPost,
+  unupvotePost
+
 };

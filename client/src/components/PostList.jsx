@@ -4,6 +4,8 @@ import userPlaceholder from '../assets/user.png';
 import { FaStar, FaThumbsUp } from 'react-icons/fa';
 import moment from 'moment';
 import ConfirmationModal from './ConfirmationModal';
+import { useEffect } from 'react';
+
 
 const PostHeader = ({ user }) => (
   <div className="flex items-center mb-4">
@@ -28,12 +30,12 @@ const PostContent = ({ post, isEditing, editedPost, setEditedPost }) => (
         <input
           type="text"
           value={editedPost.title}
-          onChange={(e) => setEditedPost((prev) => ({ ...prev, title: e.target.value }))}
+          onChange={(e) => setEditedPost((prev) => ({ ...prev, title: e.target.value }))} 
           className="w-full border border-gray-300 p-2 rounded mb-2"
         />
         <textarea
           value={editedPost.body}
-          onChange={(e) => setEditedPost((prev) => ({ ...prev, body: e.target.value }))}
+          onChange={(e) => setEditedPost((prev) => ({ ...prev, body: e.target.value }))} 
           className="w-full border border-gray-300 p-2 rounded mb-2"
         />
       </>
@@ -49,7 +51,8 @@ const PostContent = ({ post, isEditing, editedPost, setEditedPost }) => (
   </div>
 );
 
-const PostFooter = ({
+
+const PostFooter =  ({
   post,
   isPostTab,
   refreshPosts,
@@ -59,15 +62,70 @@ const PostFooter = ({
   setEditedPost
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [hasStarred, setHasStarred] = useState(post.stars?.includes(localStorage.getItem('userId')) || false);
+  const [hasUpvoted, setHasUpvoted] = useState(post.upvotes?.includes(localStorage.getItem('userId')) || false);
 
-  const handleDeleteClick = () => {
-    setIsDeleteModalOpen(true);
+  const isLoggedIn = () => !!localStorage.getItem('token');
+  const getUserId = () => localStorage.getItem('userId');
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      setHasStarred(post.stars?.includes(getUserId()) || false);
+      setHasUpvoted(post.upvotes?.includes(getUserId()) || false);
+    } else {
+      setHasStarred(false);
+      setHasUpvoted(false);
+    }
+  }, [post.stars, post.upvotes, isLoggedIn, getUserId]);
+
+  const handleAction = async (actionType) => {
+    if (!isLoggedIn()) {
+      alert('You need to log in to give a star or upvote.');
+      return;
+    }
+
+    const isCurrentlyActive = actionType === 'star' ? hasStarred : hasUpvoted;
+    const method = isCurrentlyActive ? 'DELETE' : 'PUT';
+    const backendAction = actionType === 'star' && isCurrentlyActive ? 'star' :
+                           actionType === 'upvote' && isCurrentlyActive ? 'upvote' : actionType;
+    const backendUrlAction = isCurrentlyActive ? backendAction : actionType;
+    console.log('isCurrentlyActive:', isCurrentlyActive);
+    console.log('method:', method);
+    console.log('backendUrlAction:', backendUrlAction);
+    try {
+      const response = await fetch(`http://localhost:3000/api/posts/${post._id}/${backendUrlAction}`, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        // Removed the body for DELETE requests
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to ${isCurrentlyActive ? 'remove' : ''} ${actionType}`);
+      }
+      console.log(`${actionType.charAt(0).toUpperCase() + actionType.slice(1)} ${isCurrentlyActive ? 'removed' : 'added'} successfully`);
+       refreshPosts();
+      if (actionType === 'star') {
+        setHasStarred(!hasStarred);
+      } else if (actionType === 'upvote') {
+        setHasUpvoted(!hasUpvoted);
+      }
+    } catch (error) {
+      console.error(`Error during ${actionType}:`, error);
+      alert(error.message || `Failed to ${isCurrentlyActive ? 'remove' : ''} ${actionType}`);
+    }
   };
 
-  const handleConfirmDelete = async (postId) => {
+  const handleDeleteClick = () => setIsDeleteModalOpen(true);
+  const handleCancelDelete = () => setIsDeleteModalOpen(false);
+
+  const handleConfirmDelete = async () => {
     setIsDeleteModalOpen(false);
     try {
-      const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
+      const response = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -79,15 +137,12 @@ const PostFooter = ({
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to delete post');
       }
+
       refreshPosts();
     } catch (error) {
       console.error('Error deleting post:', error);
       alert(error.message || 'Failed to delete post');
     }
-  };
-
-  const handleCancelDelete = () => {
-    setIsDeleteModalOpen(false);
   };
 
   const handleEdit = () => {
@@ -123,16 +178,20 @@ const PostFooter = ({
     <div className="text-sm text-gray-600 mt-5 space-y-2">
       <div className="flex justify-between items-center">
         <button
-          onClick={() => console.log('Star clicked')}
-          className="flex items-center text-yellow-500 hover:scale-105 transition"
+          onClick={() => handleAction('star')}
+          className={`flex items-center hover:scale-105 transition ${
+            hasStarred ? 'text-yellow-700' : 'text-yellow-500'
+          }`}
         >
           <FaStar className="mr-2" />
           <span>{post.stars?.length || 0} Stars</span>
         </button>
 
         <button
-          onClick={() => console.log('Upvote clicked')}
-          className="flex items-center text-blue-500 hover:scale-105 transition"
+          onClick={() => handleAction('upvote')}
+          className={`flex items-center hover:scale-105 transition ${
+            hasUpvoted ? 'text-blue-700' : 'text-blue-500'
+          }`}
         >
           <FaThumbsUp className="mr-2" />
           <span>{post.upvotes?.length || 0} Upvotes</span>
@@ -204,13 +263,14 @@ const PostFooter = ({
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={handleCancelDelete}
-        onConfirm={() => handleConfirmDelete(post._id)}
+        onConfirm={handleConfirmDelete}
         message={`Are you sure you want to delete the post "${post.title}"`}
         confirmText="Yes, Delete"
       />
     </div>
   );
 };
+
 
 const PostList = ({ posts, isPostTab, refreshPosts }) => {
   const [editingPostId, setEditingPostId] = useState(null);

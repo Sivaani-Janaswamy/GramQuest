@@ -45,5 +45,8 @@ router.put('/:id/upvote', verifyToken, postController.upvotePost); // Added veri
 router.post('/:id/reply', verifyToken, postController.replyToPost); // Added verifyToken
 router.put('/:id', verifyToken, postController.updatePost);
 router.delete('/:id', verifyToken, postController.deletePost);
+// In your routes file (e.g., postRoutes.js)
+router.delete('/:id/unstar', verifyToken, postController.unstarPost);
+router.delete('/:id/unupvote',verifyToken, postController.unupvotePost); // New route
 
 module.exports = router;
