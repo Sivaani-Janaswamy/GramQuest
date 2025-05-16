@@ -29,6 +29,7 @@ const Login = () => {
       login(user.email, formData.password);
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify({ id: user._id, name: user.name, email: user.email }));
+      console.log("User ID stored:", localStorage.getItem("user"));
     } catch (error) {
       if (error.response) {
         setMessage('Login failed. Please check your credentials.');

@@ -14,26 +14,37 @@ export default function GSpace() {
 
   useEffect(() => {
     const fetchGspaces = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Unauthorized access. Please log in.");
+        navigate("/login"); // optional: auto-redirect
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
         const response = await axios.get("/api/gspaces", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setGspaces(response.data); // assuming API returns array of gspaces
+        setGspaces(response.data);
       } catch (err) {
         console.error("Failed to fetch gspaces:", err);
-        setError("Failed to load GSpaces.");
+        if (err.response && err.response.status === 401) {
+          setError("Session expired. Please log in again.");
+          navigate("/login"); // optional: auto-redirect
+        } else {
+          setError("Failed to load GSpaces.");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchGspaces();
-  }, []);
+  }, [navigate]);
 
-  // Filter based on search query
   const filtered = gspaces.filter((g) =>
     g.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -43,24 +54,27 @@ export default function GSpace() {
   }
 
   if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+    return (
+      <div className="text-center py-10 text-red-600 font-semibold">
+        {error}
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-white px-0 py-0">
-      {/* Title and Subtitle Section */}
       <div className="relative w-full text-center z-10 py-10">
         <div className="absolute inset-0 bg-gradient-to-br from-teal-300 via-lime-300 to-teal-300 opacity-30 animate-pulse"></div>
         <h1 className="text-4xl font-extrabold text-[#001A6E] mb-3 relative z-20">
           Discover GSpaces
         </h1>
         <p className="text-md text-[#074799] max-w-2xl mx-auto relative z-20">
-          Connect with others who share your passion. Create or join a GSpace to showcase your talent, research, or ideas!
+          Connect with others who share your passion. Create or join a GSpace to
+          showcase your talent, research, or ideas!
         </p>
       </div>
 
       <div className="max-w-7xl mx-auto py-5 px-4">
-        {/* Search and Create Button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 max-w-4xl mx-auto">
           <SearchBar
             value={searchQuery}
@@ -83,13 +97,20 @@ export default function GSpace() {
 
         {filtered.length === 0 ? (
           <div className="text-center py-5">
-            <h2 className="text-2xl text-[#001A6E] font-semibold mb-3">No GSpaces Found</h2>
-            <p className="text-[#009990]">Start building your own interest-based community today.</p>
+            <h2 className="text-2xl text-[#001A6E] font-semibold mb-3">
+              No GSpaces Found
+            </h2>
+            <p className="text-[#009990]">
+              Start building your own interest-based community today.
+            </p>
           </div>
         ) : (
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.slice(0, 9).map((space) => (
-              <GspaceCard key={space.id} {...space} />
+            {filtered.slice(0, 9).map((space, index) => (
+              <GspaceCard
+                key={space.id || index} // <-- Fixes missing key warning
+                {...space}
+              />
             ))}
           </div>
         )}

@@ -34,7 +34,8 @@ const createPost = async (req, res) => {
 // Get all posts
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('user');
+    // Populate only user info, no replies
+    const posts = await Post.find().populate('user', 'name profilePic');
     res.json(posts);
   } catch (err) {
     console.error('Error fetching posts:', err);
@@ -42,10 +43,14 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+
 // Get posts created by the logged-in user
 const getMyPosts = async (req, res) => {
   try {
-    const myPosts = await Post.find({ user: req.user._id }).populate('user');
+    const myPosts = await Post.find({ user: req.user._id })
+  .populate('user')
+  .select({ replies: 0 });
+
     res.json(myPosts);
   } catch (err) {
     console.error('Error fetching user posts:', err);
@@ -53,13 +58,30 @@ const getMyPosts = async (req, res) => {
   }
 };
 
+// Get a single post by ID
+const getPostById = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate('user', 'name email profilePic')
+      .populate('replies.user', 'name profilePic');
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.json(post);
+  } catch (err) {
+    console.error('Error fetching post by ID:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 // Star a post
 const starPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    const  userId  = req.user._id;
+    const userId = req.user._id;
     if (!userId) return res.status(400).json({ message: 'User ID required for starring' });
 
     if (!post.stars.includes(userId)) {
@@ -96,7 +118,7 @@ const upvotePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    const  userId  = req.user._id;
+    const userId = req.user._id;
     if (!userId) return res.status(400).json({ message: 'User ID required for upvoting' });
 
     if (!post.upvotes.includes(userId)) {
@@ -114,23 +136,48 @@ const upvotePost = async (req, res) => {
 // Reply to a post
 const replyToPost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
+    const postId = req.params.id;
+    const userId = req.user?._id;
+    const { comment, parentReplyId = null } = req.body;
 
-    const { userId, comment } = req.body;
-    if (!userId || !comment.trim()) {
-      return res.status(400).json({ message: 'User ID and comment are required' });
+    if (!postId) {
+      return res.status(400).json({ message: 'Post ID is required' });
+    }
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized: User ID missing' });
+    }
+    if (!comment || !comment.trim()) {
+      return res.status(400).json({ message: 'Comment is required' });
     }
 
-    post.replies.push({ user: userId, comment });
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // If parentReplyId is provided, verify that the parent reply exists in this post
+    if (parentReplyId) {
+      const parentReplyExists = post.replies.some(
+        (reply) => reply._id.toString() === parentReplyId.toString()
+      );
+      if (!parentReplyExists) {
+        return res.status(400).json({ message: 'Parent reply not found' });
+      }
+    }
+
+    // Push the new reply with parentReplyId field
+    post.replies.push({ user: userId, comment, parentReplyId });
 
     await post.save();
-    res.json(post);
+
+    res.status(200).json({ message: 'Reply added successfully', post });
   } catch (err) {
     console.error('Error replying to post:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 
 // Update a post
 const updatePost = async (req, res) => {
@@ -179,8 +226,8 @@ const unupvotePost = async (req, res) => {
 // Delete a post
 const deletePost = async (req, res) => {
   console.log('Post ID:', req.params.id);
-      //Log req.user._id
-    console.log('User ID:', req.user._id);
+  //Log req.user._id
+  console.log('User ID:', req.user._id);
   try {
     const post = await Post.findOneAndDelete({
       _id: req.params.id,
@@ -215,6 +262,6 @@ module.exports = {
   updatePost,
   deletePost,
   unstarPost,
-  unupvotePost
-
+  unupvotePost,
+  getPostById
 };

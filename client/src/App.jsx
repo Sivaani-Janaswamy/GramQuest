@@ -11,6 +11,7 @@ import Quest from './pages/Quest';
 import { useAuth } from './context/AuthContext';
 import CreateGSpace from './pages/CreateGSpace';
 import CommunityPage from './pages/CommunityPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 const Home = () => <div className="p-4">Welcome Home</div>;
 
@@ -89,6 +90,7 @@ const App = () => {
         <Route path="/gspace/create" element={<CreateGSpace />} />
         <Route path="/gspace/:id" element={<CommunityPage />} />
         <Route path="/quests" element={<Quest />} />
+        <Route path="/posts/:postId" element={<PostDetailPage />} />
       </Routes>
     </>
   );

@@ -40,13 +40,13 @@ const upload = multer({
 router.post('/', verifyToken, upload.array('attachments'), postController.createPost);
 router.get('/', postController.getAllPosts);
 router.get('/mine', verifyToken, postController.getMyPosts);
-router.put('/:id/star', verifyToken, postController.starPost); // Added verifyToken
-router.put('/:id/upvote', verifyToken, postController.upvotePost); // Added verifyToken
-router.post('/:id/reply', verifyToken, postController.replyToPost); // Added verifyToken
+router.get('/:id', postController.getPostById); // Add this route to get a post by ID
+router.put('/:id/star', verifyToken, postController.starPost);
+router.put('/:id/upvote', verifyToken, postController.upvotePost);
+router.post('/:id/reply', verifyToken, verifyToken, postController.replyToPost);
 router.put('/:id', verifyToken, postController.updatePost);
 router.delete('/:id', verifyToken, postController.deletePost);
-// In your routes file (e.g., postRoutes.js)
 router.delete('/:id/unstar', verifyToken, postController.unstarPost);
-router.delete('/:id/unupvote',verifyToken, postController.unupvotePost); // New route
+router.delete('/:id/unupvote', verifyToken, postController.unupvotePost);
 
 module.exports = router;
