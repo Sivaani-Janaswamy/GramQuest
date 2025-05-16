@@ -95,9 +95,9 @@ We warmly welcome contributions of all kinds\! Whether you're a seasoned develop
   
   **By participating in the GramQuest project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).**
 
-  * **Reporting Bugs:** If you encounter any issues, please open a detailed bug report on our [GitHub Issues](https://www.google.com/search?q=https://github.com/Sivaani-Janaswamy/GramQuest/issues) page.
+  * **Reporting Bugs:** If you encounter any issues, please open a detailed bug report on our [GitHub Issues](https://github.com/Sivaani-Janaswamy/GramQuest/issues) page.
 
-  * **Suggesting Enhancements:** Have a brilliant idea to make GramQuest even better? Share your suggestions as a feature request on our [GitHub Issues](https://www.google.com/search?q=https://github.com/Sivaani-Janaswamy/GramQuest/issues).
+  * **Suggesting Enhancements:** Have a brilliant idea to make GramQuest even better? Share your suggestions as a feature request on our [GitHub Issues](https://github.com/Sivaani-Janaswamy/GramQuest/issues).
 
   * **Code Contributions:** Ready to roll up your sleeves and write some code?
 
