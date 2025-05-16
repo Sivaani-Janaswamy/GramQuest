@@ -2,8 +2,7 @@
 
 # 🚀 GramQuest: Your Social Knowledge Hub 🧠
 
-[](https://www.google.com/search?q=https://github.com/your-github-username/your-repo-name)
-[](https://www.google.com/search?q=https://github.com/your-github-username/your-repo-name/graphs/commit-activity)
+[](https://www.google.com/search?q=https://github.com/Sivaani-Janaswamy/GramQuest)
 [](https://opensource.org/licenses/MIT)
 [](https://github.com/sindresorhus/awesome)
 
@@ -79,7 +78,7 @@ cd server
 npm start
 ```
 
-This will start the backend server. You should see output indicating the server is running (typically on `http://localhost:5000` or a similar port).
+This will start the backend server. You should see output indicating the server is running (typically on `http://localhost:3000` or a similar port).
 
 **Terminal 2: Frontend**
 
@@ -93,10 +92,12 @@ This will start the frontend development server. Usually, your browser will auto
 ## 🤝 Contributing to GramQuest
 
 We warmly welcome contributions of all kinds\! Whether you're a seasoned developer, a passionate designer, a meticulous tester, or simply have great ideas, your input is valuable. Here's how you can get involved:
+  
+  **By participating in the GramQuest project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).**
 
-  * **Reporting Bugs:** If you encounter any issues, please open a detailed bug report on our [GitHub Issues](https://www.google.com/search?q=https://github.com/your-github-username/your-repo-name/issues) page.
+  * **Reporting Bugs:** If you encounter any issues, please open a detailed bug report on our [GitHub Issues](https://www.google.com/search?q=https://github.com/Sivaani-Janaswamy/GramQuest/issues) page.
 
-  * **Suggesting Enhancements:** Have a brilliant idea to make GramQuest even better? Share your suggestions as a feature request on our [GitHub Issues](https://www.google.com/search?q=https://github.com/your-github-username/your-repo-name/issues).
+  * **Suggesting Enhancements:** Have a brilliant idea to make GramQuest even better? Share your suggestions as a feature request on our [GitHub Issues](https://www.google.com/search?q=https://github.com/Sivaani-Janaswamy/GramQuest/issues).
 
   * **Code Contributions:** Ready to roll up your sleeves and write some code?
 
@@ -106,7 +107,7 @@ We warmly welcome contributions of all kinds\! Whether you're a seasoned develop
     4.  Push your changes to your fork (`git push origin feature/your-awesome-feature`).
     5.  Submit a pull request to the main repository.
 
-    Please follow our [Contribution Guidelines](https://www.google.com/search?q=link-to-contribution-guidelines) for code style and best practices.
+    Please follow our [Contribution Guidelines](CONTRIBUTING.md) for code style and best practices.
 
   * **Documentation:** Help us improve our documentation\! Clear and concise documentation makes it easier for everyone to understand and contribute to GramQuest.
 
@@ -114,7 +115,7 @@ We warmly welcome contributions of all kinds\! Whether you're a seasoned develop
 
 ## 📄 License
 
-GramQuest is open-source software licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
+GramQuest is open-source software licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgements
 
