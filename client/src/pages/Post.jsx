@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthRedirect from '../hooks/useAuthRedirect';
-import PostForm from '../components/PostForm';
-import RecentPosts from '../components/RecentPosts';
+import { PostForm, RecentPosts } from '../components/Posts';
 
-const Post = ({ posts, refreshPosts }) => { // Receive posts as a prop
-  const [user, setUser] = useState(null);
+const Post = ({ posts, refreshPosts }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null); // ✅ Define user state
   const navigate = useNavigate();
 
   useAuthRedirect(navigate);
 
   useEffect(() => {
     const fetchUser = () => {
-      const loggedUser = JSON.parse(localStorage.getItem('user'));
-      if (loggedUser) {
-        setUser(loggedUser);
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+        }
+      } catch (err) {
+        setError('Failed to parse user data.');
       }
     };
 
     fetchUser();
-    setLoading(false); //  Loading is now controlled by App.js
+    setLoading(false); // Loading is now controlled by App.js
   }, []);
 
-  const userPosts = posts // Use the posts prop from App.js
+  const userPosts = (Array.isArray(posts) ? posts : [])
     .filter((post) => {
       const postUserId =
         typeof post.user === 'object' && post.user !== null
@@ -37,8 +41,10 @@ const Post = ({ posts, refreshPosts }) => { // Receive posts as a prop
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-16">
-        {/* No Logout Button Here */}
+        {/* Post Creation Form */}
         <PostForm posts={posts} setPosts={() => {}} /> {/* App.js handles setPosts */}
+
+        {/* User Posts Section */}
         <div className="w-full">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-left px-33">
             Your Previous Posts

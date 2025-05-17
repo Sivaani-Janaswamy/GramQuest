@@ -7,6 +7,8 @@ const connectDB = require('./database/connect');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const gspaceRoutes = require('./routes/gspaceRoutes');
+const recommendationRoutes = require('./routes/recommendations');
+const trendingRoutes = require('./routes/trending');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/gspaces', gspaceRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/trending', trendingRoutes);
 console.log('API Posts Route Loaded');
 
 // Home route

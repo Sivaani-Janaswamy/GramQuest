@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import userPlaceholder from '../assets/user.png';
-import ProfileCard from '../components/ProfileCard';
-import PostList from '../components/PostList';
+import {ProfileCard} from '../components/Profile';
+import {PostList} from '../components/Posts';
 
 const Profile = () => {
   const { user, isAuthenticated, updateUserProfilePic } = useAuth();

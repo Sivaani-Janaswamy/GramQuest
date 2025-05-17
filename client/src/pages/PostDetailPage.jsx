@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
-
-import Card from '../components/Card';
-import PostHeader from '../components/PostHeader';
-import PostContent from '../components/PostContent';
+import {Card} from '../components/common';
+import {PostHeader, PostContent} from '../components/Posts';
 import { FaReply } from 'react-icons/fa';
 
 // Helper to build nested reply tree

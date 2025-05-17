@@ -1,8 +1,8 @@
 // pages/Quest.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import QuestCard from '../components/QuestCard';
-import SearchBar from '../components/SearchBar';
+import QuestCard from '../components/Quests/QuestCard';
+import SearchBar from '../components/common/Searchbar/SearchBar';
 
 const Quest = () => {
   const [quests, setQuests] = useState([

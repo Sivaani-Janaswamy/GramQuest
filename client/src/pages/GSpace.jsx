@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import GspaceCard from "../components/GspaceCard";
-import SearchBar from "../components/SearchBar";
+import {GSpaceCard} from "../components/GSpace";
+import {SearchBar} from "../components/common";
 import { PlusCircle } from "lucide-react";
 
 export default function GSpace() {
@@ -18,7 +18,7 @@ export default function GSpace() {
 
       if (!token) {
         setError("Unauthorized access. Please log in.");
-        navigate("/login"); // optional: auto-redirect
+        navigate("/login"); 
         return;
       }
 
@@ -33,7 +33,7 @@ export default function GSpace() {
         console.error("Failed to fetch gspaces:", err);
         if (err.response && err.response.status === 401) {
           setError("Session expired. Please log in again.");
-          navigate("/login"); // optional: auto-redirect
+          navigate("/login"); 
         } else {
           setError("Failed to load GSpaces.");
         }
@@ -107,8 +107,8 @@ export default function GSpace() {
         ) : (
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.slice(0, 9).map((space, index) => (
-              <GspaceCard
-                key={space.id || index} // <-- Fixes missing key warning
+              <GSpaceCard
+                key={space.id || index} 
                 {...space}
               />
             ))}

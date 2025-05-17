@@ -1,31 +1,25 @@
-import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import useAuthRedirect from '../hooks/useAuthRedirect';
-import RecentPosts from '../components/RecentPosts';
-import Sidebar from '../components/Sidebar';
+import {RecentPosts} from '../components/Posts';
+import {Sidebar} from '../components/common';
+import useFetchPosts from '../hooks/useFetchPosts'; 
 
 const Answer = () => {
-  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   useAuthRedirect(navigate);
+  const { posts, refreshPosts, loading, error } = useFetchPosts();
 
-  const refreshPosts = async () => { // Define the refreshPosts function here
-    try {
-      const response = await axios.get('/api/posts');
-      setPosts(response.data);
-    } catch (err) {
-      console.error('Failed to fetch posts:', err);
-    }
-  };
+  if (loading) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading posts...</div>;
+  }
 
-  useEffect(() => {
-    refreshPosts(); // Call it on initial load
-  }, []);
+  if (error) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center text-red-500">Error loading posts: {error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 py-0 px-0">
-      <div className="container  space-y-8">
+      <div className="container space-y-8">
         {/* Main Content and Sidebar Layout */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* 🠖 Move Sidebar First */}
@@ -40,7 +34,7 @@ const Answer = () => {
               </p>
             </div>
             {/* Recent Posts */}
-            <RecentPosts posts={posts} isPostTab={false} refreshPosts={refreshPosts} /> {/* Pass refreshPosts as a prop */}
+            <RecentPosts posts={posts} isPostTab={false} refreshPosts={refreshPosts} /> {/* Pass refreshPosts */}
           </div>
         </div>
       </div>

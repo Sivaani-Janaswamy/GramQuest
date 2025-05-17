@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import Form from '../components/Form';
+import { Form } from '../components/common';
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +11,8 @@ const Signup = () => {
     confirmPassword: '',
   });
   const [message, setMessage] = useState('');
-
-  const { login } = useAuth();
+  const { signup } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,17 +27,18 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/users/signup', formData);
-      setMessage('Signup successful!');
+      await signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
 
-      login(formData.email, formData.password);
-      localStorage.setItem('token', response.data.token);
-
-      if (response.data.user) {
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      } else {
-        setMessage('User data is not available.');
-      }
+      setMessage('Signup successful! Redirecting...');
+      
+      // delay navigation to homepage for 2 seconds
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
 
       setFormData({
         name: '',

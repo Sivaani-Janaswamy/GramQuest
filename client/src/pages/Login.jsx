@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import Form from '../components/Form';
-import { useAuth } from '../context/AuthContext';
+import {Form} from '../components/common';
+import useLogin from '../hooks/useLogin';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
-
-  const { login } = useAuth();
+  const { message, handleLogin, loading } = useLogin();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,30 +12,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.email || !formData.password) {
-      setMessage('Both email and password are required.');
-      return;
-    }
- 
-    try {
-      const response = await axios.post('http://localhost:3000/api/users/login', formData);
-      const { token, user } = response.data;
-
-      setMessage('Login successful!');
-      login(user.email, formData.password);
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify({ id: user._id, name: user.name, email: user.email }));
-      console.log("User ID stored:", localStorage.getItem("user"));
-    } catch (error) {
-      if (error.response) {
-        setMessage('Login failed. Please check your credentials.');
-      } else {
-        setMessage('An unexpected error occurred. Please try again later.');
-      }
-    }
+    await handleLogin(formData);
   };
-  
 
   const inputs = [
     {
@@ -67,7 +42,7 @@ const Login = () => {
           <p className="mt-4 text-lg text-gray-600">Welcome back! Please enter your credentials.</p>
         </div>
 
-        <Form inputs={inputs} buttonLabel="Login" onSubmit={handleSubmit} />
+        <Form inputs={inputs} buttonLabel={loading ? 'Logging in...' : 'Login'} onSubmit={handleSubmit} disabled={loading} />
 
         {message && (
           <p className={`mt-6 text-center text-md ${message.includes('successful') ? 'text-green-600' : 'text-red-500'}`}>
