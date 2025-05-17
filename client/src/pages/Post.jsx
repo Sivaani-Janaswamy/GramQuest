@@ -2,30 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthRedirect from '../hooks/useAuthRedirect';
 import { PostForm, RecentPosts } from '../components/Posts';
+import { jwtDecode } from 'jwt-decode';
 
 const Post = ({ posts, refreshPosts }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [user, setUser] = useState(null); // ✅ Define user state
+  const [user, setUser] = useState(null); 
   const navigate = useNavigate();
 
   useAuthRedirect(navigate);
 
   useEffect(() => {
     const fetchUser = () => {
-      try {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          setUser(parsedUser);
-        }
-      } catch (err) {
-        setError('Failed to parse user data.');
-      }
-    };
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      const decoded = jwtDecode(parsedUser.token); 
 
-    fetchUser();
-    setLoading(false); // Loading is now controlled by App.js
+      const isExpired = decoded.exp * 1000 < Date.now(); 
+      if (isExpired) {
+        setError('Session expired. Please log in again.');
+        localStorage.removeItem('user');
+        setUser(null);
+        return;
+      }
+
+      setUser(parsedUser);
+    }
+  } catch (err) {
+    setError('Failed to parse user data.');
+  }
+  finally {
+        setLoading(false); 
+      }
+};
   }, []);
 
   const userPosts = (Array.isArray(posts) ? posts : [])

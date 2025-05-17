@@ -17,11 +17,17 @@ const PostForm = ({ posts, setPosts }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = localStorage.getItem('token');
-
-    if (!user || !token) {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
       setError('You must be logged in to post a question.');
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+    const token = user.token;
+
+    if (!token) {
+      setError('Authentication token missing.');
       return;
     }
 
