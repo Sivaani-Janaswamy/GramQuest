@@ -1,28 +1,28 @@
 import { Link } from 'react-router-dom';
 
-const NavLinks = () => (
-  <div className="flex space-x-8 ">
-    <Link 
-      to="/Answer" 
-      className="text-[#E1FFBB] hover:bg-[#b4ff8c] hover:text-emerald-600 py-7.5 px-6  transition-all duration-300 text-base font-semibold flex items-center"
+const NavLinks = ({ className }) => (
+  <div className={`flex space-x-6 ${className}`}>
+    <Link
+      to="/Answer"
+      className="text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 text-sm font-medium"
     >
       Answer
     </Link>
-    <Link 
-      to="/Post" 
-      className="text-[#E1FFBB] hover:bg-[#b4ff8c] hover:text-emerald-600 py-7.5 px-6  transition-all duration-300 text-base font-semibold flex items-center"
+    <Link
+      to="/Post"
+      className="text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 text-sm font-medium"
     >
       Post
     </Link>
-    <Link 
-      to="/Gspaces" 
-      className="text-[#E1FFBB] hover:bg-[#b4ff8c] hover:text-emerald-600 py-7.5 px-6 transition-all duration-300 text-base font-semibold flex items-center"
+    <Link
+      to="/Gspaces"
+      className="text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 text-sm font-medium"
     >
       Gspaces
     </Link>
-    <Link 
-      to="/Quests" 
-      className="text-[#E1FFBB] hover:bg-[#b4ff8c] hover:text-emerald-600 py-7.5 px-6  transition-all duration-300 text-base font-semibold flex items-center"
+    <Link
+      to="/Quests"
+      className="text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 text-sm font-medium"
     >
       Quests
     </Link>

@@ -3,10 +3,10 @@ import logo from '../../../assets/gq_logo.png';
 
 const Logo = () => (
   <div className="flex items-center">
-    <img src={logo} alt="Logo" className="h-16 w-auto mr-2" />
-    <Link 
-      to="/" 
-      className="text-lg font-semibold text-[#E1FFBB] hover:text-[#aaff6d] transition duration-300"
+    <img src={logo} alt="Logo" className="h-8 w-auto mr-2 transform scale-150" />
+    <Link
+      to="/"
+      className="text-xl font-semibold text-gray-800 hover:text-blue-500 focus:outline-none transition duration-200"
     >
       GramQuest
     </Link>
