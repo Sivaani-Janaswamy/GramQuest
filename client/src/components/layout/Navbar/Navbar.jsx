@@ -15,6 +15,9 @@ const Navbar = ({ onLogout }) => {
     cancelAction,
   } = useLogoutConfirmation(onLogout);
 
+  // Increased minWidth to accommodate "Login" and "Sign Up"
+  const rightSideMinWidth = '180px';
+
   return (
     <>
       <nav className="bg-white text-gray-800 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm border-b border-gray-200">
@@ -26,7 +29,7 @@ const Navbar = ({ onLogout }) => {
         <div className="hidden md:flex w-full justify-center space-x-8">
           <NavLinks className="flex items-center space-x-4" />
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 justify-end" style={{ minWidth: rightSideMinWidth }}> {/* Added justify-end */}
           {isAuthenticated ? (
             <div className="flex items-center transform scale-115">
               <Link to="/profile" className="flex items-center space-x-2 group focus:outline-none">
@@ -45,7 +48,7 @@ const Navbar = ({ onLogout }) => {
                   </span>
                 )}
               </Link>
-              <div className="ml-10 flex items-center  ">
+              <div className="ml-3 flex items-center">
                 <button
                   onClick={handleLogoutClick}
                   className="text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200"
@@ -55,16 +58,16 @@ const Navbar = ({ onLogout }) => {
               </div>
             </div>
           ) : (
-            <div className="flex items-center space-x-3  transform scale-115"> 
+            <div className="flex items-center space-x-3 transform scale-115">
               <Link
                 to="/login"
-                className="text-sm font-medium  text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 "
+                className="text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 "
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="whitespace-nowrap text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200" 
+                className="whitespace-nowrap text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200"
               >
                 Sign Up
               </Link>
