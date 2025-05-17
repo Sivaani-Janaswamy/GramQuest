@@ -28,7 +28,7 @@ const Navbar = ({ onLogout }) => {
         </div>
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
-            <div className="flex items-center">
+            <div className="flex items-center transform scale-115">
               <Link to="/profile" className="flex items-center space-x-2 group focus:outline-none">
                 <img
                   src={
@@ -45,20 +45,20 @@ const Navbar = ({ onLogout }) => {
                   </span>
                 )}
               </Link>
-              <div className="ml-10 flex items-center">
+              <div className="ml-10 flex items-center  ">
                 <button
                   onClick={handleLogoutClick}
-                  className="text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none transition duration-200"
+                  className="text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200"
                 >
                   Logout
                 </button>
               </div>
             </div>
           ) : (
-            <div className="flex items-center space-x-3"> {/* Changed to items-center */}
+            <div className="flex items-center space-x-3  transform scale-115"> 
               <Link
                 to="/login"
-                className="text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200"
+                className="text-sm font-medium  text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 "
               >
                 Login
               </Link>

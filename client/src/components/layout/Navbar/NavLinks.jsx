@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 const NavLinks = ({ className }) => (
-  <div className={`flex space-x-6 ${className}`}>
+  <div className={`flex space-x-6 ${className} transform scale-115`}>
     <Link
       to="/Answer"
       className="text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 text-sm font-medium"
