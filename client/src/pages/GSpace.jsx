@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {GSpaceCard} from "../components/GSpace";
-import {SearchBar} from "../components/common";
+import { SearchAndFilter } from "../components/common";
 import { PlusCircle } from "lucide-react";
 
 export default function GSpace() {
@@ -76,12 +76,6 @@ export default function GSpace() {
 
       <div className="max-w-7xl mx-auto py-5 px-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 max-w-4xl mx-auto">
-          <SearchBar
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for a GSpace..."
-            aria-label="Search GSpaces"
-          />
           <button
             type="button"
             onClick={() => navigate("/gspace/create")}

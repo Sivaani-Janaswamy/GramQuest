@@ -22,10 +22,8 @@ const Navbar = ({ onLogout }) => {
     <>
       <nav className="bg-white text-gray-800 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm border-b border-gray-200">
         <div className="flex items-center">
-          <Link to="/" className="focus:outline-none">
-            <Logo />
-          </Link>
-        </div>
+          <Logo /> 
+         </div>
         <div className="hidden md:flex w-full justify-center space-x-8">
           <NavLinks className="flex items-center space-x-4" />
         </div>

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import QuestCard from '../components/Quests/QuestCard';
-import SearchBar from '../components/common/Searchbar/SearchBar';
+import { SearchAndFilter } from '../components/common';
 
 const Quest = () => {
   const [quests, setQuests] = useState([
@@ -35,8 +35,6 @@ const Quest = () => {
       </div>
 
       {/* Search Bar */}
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
       {/* Custom Styled Button as Link */}
       <div className="text-center my-6">
         <Link

@@ -26,13 +26,6 @@ const Answer = () => {
           <Sidebar />
 
           <div className="flex-1">
-            {/* Page Title and Description */}
-            <div className="text-center mb-8 py-10">
-              <h1 className="text-4xl font-bold text-gray-800 mb-4">Answer Questions</h1>
-              <p className="text-lg text-gray-600 mb-3">
-                Browse and answer questions from the community. Your insights help others!
-              </p>
-            </div>
             {/* Recent Posts */}
             <RecentPosts posts={posts} isPostTab={false} refreshPosts={refreshPosts} /> {/* Pass refreshPosts */}
           </div>

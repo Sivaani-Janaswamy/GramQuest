@@ -1,5 +1,5 @@
 import PostList from './PostList';
-import {Filter, SearchBar} from '../common';
+import { SearchAndFilter } from '../common';
 import usePostFilters from '../../hooks/usePostFilters'; // Import the hook
 
 const RecentPosts = ({ posts, isPostTab, refreshPosts }) => {
@@ -8,8 +8,11 @@ const RecentPosts = ({ posts, isPostTab, refreshPosts }) => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center mb-6 space-x-3">
-        <SearchBar onSearchChange={handleSearchChange} />
-        <Filter onFilterChange={handleFilterChange} />
+        <SearchAndFilter
+          onFilterChange={handleFilterChange}
+          onSearchChange={handleSearchChange}
+          isPostTab={isPostTab}
+        />
       </div>
 
       <PostList posts={filteredPosts} isPostTab={isPostTab} refreshPosts={refreshPosts} />
