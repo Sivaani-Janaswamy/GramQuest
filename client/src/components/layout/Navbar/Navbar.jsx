@@ -15,30 +15,27 @@ const Navbar = ({ onLogout }) => {
     cancelAction,
   } = useLogoutConfirmation(onLogout);
 
-  // Increased minWidth to accommodate "Login" and "Sign Up"
-  const rightSideMinWidth = '180px';
-
   return (
     <>
-      <nav className="bg-white text-gray-800 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm border-b border-gray-200">
+      <nav className="bg-white text-gray-800 py-3 px-4 md:px-6 flex justify-between items-center shadow-sm border-b border-gray-200">
         <div className="flex items-center">
           <Logo /> 
-         </div>
-        <div className="hidden md:flex w-full justify-center space-x-8">
+        </div>
+        <div className="hidden md:flex w-full justify-center space-x-4">
           <NavLinks className="flex items-center space-x-4" />
         </div>
-        <div className="flex items-center space-x-4 justify-end" style={{ minWidth: rightSideMinWidth }}> {/* Added justify-end */}
+        <div className="flex items-center space-x-3 justify-end">
           {isAuthenticated ? (
-            <div className="flex items-center transform scale-115">
-              <Link to="/profile" className="flex items-center space-x-2 group focus:outline-none">
+            <div className="flex items-center">
+              <Link to="/profile" className="flex items-center space-x-1.5 group focus:outline-none">
                 <img
                   src={
-                    user?.profilePic && user.profilePic !== "[https://via.placeholder.com/100](https://via.placeholder.com/100)"
+                    user?.profilePic && user.profilePic !== "https://via.placeholder.com/100"
                       ? user.profilePic
                       : userPlaceholder
                   }
                   alt="Profile"
-                  className="w-8 h-8 rounded-full border border-gray-300 group-hover:border-blue-500 transition duration-200"
+                  className="w-7 h-7 rounded-full border border-gray-300 group-hover:border-blue-500 transition duration-200"
                 />
                 {user?.name && (
                   <span className="text-sm font-medium text-gray-700 group-hover:text-blue-500 transition">
@@ -46,7 +43,7 @@ const Navbar = ({ onLogout }) => {
                   </span>
                 )}
               </Link>
-              <div className="ml-3 flex items-center">
+              <div className="ml-2 flex items-center">
                 <button
                   onClick={handleLogoutClick}
                   className="text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200"
@@ -56,7 +53,7 @@ const Navbar = ({ onLogout }) => {
               </div>
             </div>
           ) : (
-            <div className="flex items-center space-x-3 transform scale-115">
+            <div className="flex items-center space-x-2">
               <Link
                 to="/login"
                 className="text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200 "
@@ -65,7 +62,7 @@ const Navbar = ({ onLogout }) => {
               </Link>
               <Link
                 to="/signup"
-                className="whitespace-nowrap text-sm font-medium text-gray-600 hover:text-blue-500 focus:outline-none transition duration-200"
+                className="whitespace-nowrap text-sm font-medium text-gray-600 hover:text-blue-500 hover:bg-gray-50 px-2 py-1 rounded-md focus:outline-none transition duration-200"
               >
                 Sign Up
               </Link>
@@ -73,7 +70,7 @@ const Navbar = ({ onLogout }) => {
           )}
           <div className="md:hidden">
             <button className="focus:outline-none text-gray-500 hover:text-gray-700">
-              <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
                 <path fillRule="evenodd" clipRule="evenodd" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-5h18V6H3v2z" />
               </svg>
             </button>

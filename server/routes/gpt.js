@@ -1,23 +1,26 @@
-// backend/routes/gpt.js
+// gpt.js (OpenAI SDK v4+)
 const express = require('express');
 const router = express.Router();
-const { Configuration, OpenAIApi } = require('openai');
 require('dotenv').config();
 
-const configuration = new Configuration({
+const OpenAI = require('openai');
+
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 router.post('/suggest', async (req, res) => {
   try {
     const { prompt } = req.body;
-    const response = await openai.createChatCompletion({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
     });
-    res.json({ suggestion: response.data.choices[0].message.content });
+
+    res.json({ suggestion: chatCompletion.choices[0].message.content });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Something went wrong with GPT API.' });
   }
 });
