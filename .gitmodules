@@ -1,0 +1,6 @@
+[submodule "gramquest-frontend"]
+	path = gramquest-frontend
+	url = https://github.com/Sivaani-Janaswamy/gramquest-frontend.git
+[submodule "gramquest-backend"]
+	path = gramquest-backend
+	url = https://github.com/Sivaani-Janaswamy/gramquest-backend.git
