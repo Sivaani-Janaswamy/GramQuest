@@ -7,7 +7,7 @@ const RecentPosts = ({ posts, isPostTab, refreshPosts }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="flex items-center mb-6 space-x-3">
+      <div className="flex items-center  p-4 mb-6 space-x-3">
         <SearchAndFilter
           onFilterChange={handleFilterChange}
           onSearchChange={handleSearchChange}
