@@ -40,6 +40,45 @@ We welcome all contributions — whether you're a developer, designer, tester, o
 
 By participating, you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
+Sure! Here's a clean and professional markdown block you can paste directly into your `README.md`:
+
+---
+
+## 📦 Cloning This Repo with Submodules
+
+This repository uses **Git submodules** to include the frontend and backend projects.
+
+To clone the main project **along with its submodules**, run:
+
+```bash
+git clone https://github.com/Sivaani-Janaswamy/GramQuest.git
+cd GramQuest
+git submodule update --init --recursive
+```
+
+---
+
+## 🔄 Updating Submodules
+
+If the submodule repositories (like `gramquest-frontend` or `gramquest-backend`) have been updated and you want to fetch the latest changes inside the main repo:
+
+```bash
+# Navigate into the submodule folder
+cd gramquest-frontend   # or gramquest-backend
+
+# Pull the latest changes from its main branch
+git pull origin main
+
+# Go back to the root of the main repo
+cd ..
+
+# Add and commit the updated submodule reference
+git add gramquest-frontend   # or gramquest-backend
+git commit -m "Update submodule to latest commit"
+git push
+```
+
+---
 ---
 
 ## 📄 License
