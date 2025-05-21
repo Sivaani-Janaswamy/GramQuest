@@ -9,6 +9,7 @@ const postRoutes = require('./routes/postRoutes');
 const gspaceRoutes = require('./routes/gspaceRoutes');
 const recommendationRoutes = require('./routes/recommendations');
 const trendingRoutes = require('./routes/trending');
+const gptRoutes = require('./routes/gpt');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // Static Files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -28,6 +30,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/gspaces', gspaceRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 app.use('/api/trending', trendingRoutes);
+app.use('/api/gpt', gptRoutes);
 console.log('API Posts Route Loaded');
 
 // Home route
