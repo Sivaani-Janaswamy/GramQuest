@@ -1,8 +1,5 @@
 # 🚀 GramQuest: Your Social Knowledge Hub 🧠
 
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/Sivaani-Janaswamy/GramQuest/issues)
-
 **Unleash your curiosity and embark on a quest for knowledge!**  
 GramQuest is a vibrant, open-source social platform where users can share insights, ask questions, join challenges, and connect with others who share their passion for learning. It's a social knowledge hub where people contribute what they know to help each other grow.
 
@@ -77,8 +74,6 @@ git add gramquest-frontend   # or gramquest-backend
 git commit -m "Update submodule to latest commit"
 git push
 ```
-
----
 ---
 
 ## 📄 License
