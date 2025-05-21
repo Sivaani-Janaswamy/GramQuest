@@ -1,5 +1,10 @@
 # 🚀 GramQuest: Your Social Knowledge Hub 🧠
 
+[![Main Repo - Last Commit](https://img.shields.io/github/last-commit/Sivaani-Janaswamy/GramQuest?label=Main%20Repo)](https://github.com/Sivaani-Janaswamy/GramQuest)
+[![Frontend - Last Commit](https://img.shields.io/github/last-commit/Sivaani-Janaswamy/GramQuest-Frontend?label=Frontend)](https://github.com/Sivaani-Janaswamy/GramQuest-Frontend)
+[![Backend - Last Commit](https://img.shields.io/github/last-commit/Sivaani-Janaswamy/GramQuest-Backend?label=Backend)](https://github.com/Sivaani-Janaswamy/GramQuest-Backend)
+[![License](https://img.shields.io/github/license/Sivaani-Janaswamy/GramQuest)](https://opensource.org/licenses/MIT)
+
 **Unleash your curiosity and embark on a quest for knowledge!**  
 GramQuest is a vibrant, open-source social platform where users can share insights, ask questions, join challenges, and connect with others who share their passion for learning. It's a social knowledge hub where people contribute what they know to help each other grow.
 
@@ -29,15 +34,13 @@ GramQuest is split into two repositories:
 
 We welcome all contributions — whether you're a developer, designer, tester, or someone with ideas!
 
-- 🐛 Report bugs
-- 💡 Suggest features
-- 🧑‍💻 Submit pull requests
-- 📘 Improve documentation
-- 🎨 Contribute to UI/UX
+- 🐛 Report bugs  
+- 💡 Suggest features  
+- 🧑‍💻 Submit pull requests  
+- 📘 Improve documentation  
+- 🎨 Contribute to UI/UX  
 
 By participating, you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
-
-Sure! Here's a clean and professional markdown block you can paste directly into your `README.md`:
 
 ---
 
@@ -52,14 +55,9 @@ git clone https://github.com/Sivaani-Janaswamy/GramQuest.git
 cd GramQuest
 git submodule update --init --recursive
 ```
-
----
-
-## 🔄 Updating Submodules
-
-If the submodule repositories (like `gramquest-frontend` or `gramquest-backend`) have been updated and you want to fetch the latest changes inside the main repo:
-
-```bash
+🔄 Updating Submodules
+If the submodule repositories (like gramquest-frontend or gramquest-backend) have been updated and you want to fetch the latest changes inside the main repo:
+```
 # Navigate into the submodule folder
 cd gramquest-frontend   # or gramquest-backend
 
@@ -74,12 +72,6 @@ git add gramquest-frontend   # or gramquest-backend
 git commit -m "Update submodule to latest commit"
 git push
 ```
----
+📄 License
+This project is licensed under the MIT License.
 
-## 📄 License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
----
-
-**Let’s learn and grow together on GramQuest!** 🚀📚
