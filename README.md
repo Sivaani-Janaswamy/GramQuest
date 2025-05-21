@@ -1,57 +1,44 @@
 # 🚀 GramQuest: Your Social Knowledge Hub 🧠
 
-![License](https://img.shields.io/github/license/Sivaani-Janaswamy/GramQuest)
-![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/Sivaani-Janaswamy/GramQuest/issues)
 
 **Unleash your curiosity and embark on a quest for knowledge!**  
-**GramQuest** is a vibrant, open-source social platform where users can share insights, ask questions, join challenges, and connect with others who share a passion for learning.
-
----
-
-## 📁 Project Structure
-
-This is the **main hub repository** for the GramQuest project. The actual source code is hosted in the following repositories:
-
-- 🔹 **Frontend (React):** [gramquest-frontend](https://github.com/Sivaani-Janaswamy/gramquest-frontend)
-- 🔹 **Backend (Node.js + Express):** [gramquest-backend](https://github.com/Sivaani-Janaswamy/gramquest-backend)
-
-Please visit the respective repositories for installation, development setup, and contribution guidelines.
+GramQuest is a vibrant, open-source social platform where users can share insights, ask questions, join challenges, and connect with others who share their passion for learning. It's a social knowledge hub where people contribute what they know to help each other grow.
 
 ---
 
 ## ✨ Key Features
 
-- **Share Knowledge:** Post your thoughts, ideas, and insights.
-- **Ask & Answer Questions:** Participate in community-driven knowledge exchange.
-- **Connect with Others:** Follow users and build your learning network.
-- **Rich Media Posts:** Use images and other media to enhance your content.
-- **Smooth UX:** Built with React and styled for a clean, intuitive experience.
-- **Robust Backend:** Powered by Express and MongoDB for performance and scalability.
+- **Share Your Wisdom:** Effortlessly post your knowledge, discoveries, and thoughts in engaging formats.
+- **Ask and Learn:** Pose your questions to the community and receive insightful answers from fellow seekers.
+- **Connect and Collaborate:** Follow users with similar interests and engage in meaningful discussions.
+- **Rich Media Support:** Enhance your posts with images and other media to make your knowledge shine.
+- **Intuitive Interface:** A clean and user-friendly design powered by React ensures a seamless experience.
+- **Robust Backend:** Built with Node.js, Express, and MongoDB for a scalable and reliable platform.
 
 ---
 
-## 🛠️ Getting Started
+## 📁 Project Structure
 
-To run GramQuest locally:
+GramQuest is split into two repositories:
 
-1. Clone and set up the [Frontend Repository](https://github.com/Sivaani-Janaswamy/gramquest-frontend)
-2. Clone and set up the [Backend Repository](https://github.com/Sivaani-Janaswamy/gramquest-backend)
-
-Each repo contains its own detailed setup guide in its `README.md`.
+- 🔹 **Frontend:** [GramQuest-Frontend](https://github.com/Sivaani-Janaswamy/GramQuest-Frontend)
+- 🔸 **Backend:** [GramQuest-Backend](https://github.com/Sivaani-Janaswamy/GramQuest-Backend)
 
 ---
 
-## 🤝 Contributing
+## 🤝 Contributions Welcome!
 
-We welcome contributions from developers, designers, writers, and testers!  
-You can help by:
+We welcome all contributions — whether you're a developer, designer, tester, or someone with ideas!
 
-- Opening issues
-- Suggesting features
-- Improving documentation
-- Submitting pull requests
+- 🐛 Report bugs
+- 💡 Suggest features
+- 🧑‍💻 Submit pull requests
+- 📘 Improve documentation
+- 🎨 Contribute to UI/UX
 
-Refer to the contribution guidelines in the respective frontend/backend repos.
+By participating, you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ---
 
@@ -61,8 +48,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ---
 
-## 🙏 Acknowledgements
-
-Huge thanks to all contributors and the amazing open-source community for supporting the vision behind GramQuest.
-
-**Let’s learn and grow together!** 🚀📚
+**Let’s learn and grow together on GramQuest!** 🚀📚

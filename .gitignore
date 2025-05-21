@@ -22,15 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Client Side
-/client/node_modules/
-
-# Server Side
-/server/node_modules/
-/server/uploads/
-
-.env
-
-/server/uploads/*
-!/server/uploads/.gitkeep
